@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,29 +33,8 @@ namespace EcoApiEscen.Controllers {
          Consumes(MediaTypeNames.Application.Json),
          ProducesResponseType(StatusCodes.Status200OK),
          ProducesResponseType(StatusCodes.Status100Continue)]
-        public IActionResult PostSomething([FromRoute(Name = "number")] int mNumber, [FromQuery(Name = "name")] string name) {
+        public async Task<IActionResult> PostSomething([FromRoute(Name = "number")] int mNumber, [FromQuery(Name = "name")] string name) {
             return CreatedAtAction(nameof(Get), new { name }, name);
-        }
-
-        [HttpPatch("item/{id:int:min(0)}")]
-        public async Task PatchSomething([FromForm(Name = "_id")] int id = -1) {
-            byte[] bytes = Encoding.UTF8.GetBytes($"Arcane is dope! {id}");
-            byte[] buffer = new byte[2];
-
-            for (int i = 0; i < bytes.Length; i += buffer.Length) {
-                for (int j = 0; j < buffer.Length; j++) {
-                    if (i + j >= bytes.Length) {
-                        buffer = new byte[1] { buffer[0] };
-                        break;
-                    }
-
-                    buffer[j] = bytes[i + j];
-                }
-
-                await HttpContext.Response.Body.WriteAsync(buffer);
-            }
-
-            await HttpContext.Response.Body.FlushAsync();
         }
     }
 }
